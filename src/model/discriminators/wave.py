@@ -18,7 +18,7 @@ class WaveDiscriminator(nn.Module):
         self.act = nn.LeakyReLU(lrelu_slope)
 
         self.conv0 = weight_norm(
-            nn.Conv1d(in_channels=1, out_channels=16, kernel_size=16, padding="same")
+            nn.Conv1d(in_channels=1, out_channels=16, kernel_size=15, padding="same")
         )
 
         self.middle = nn.ModuleList(

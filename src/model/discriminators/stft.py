@@ -48,6 +48,8 @@ class STFTDiscriminator(nn.Module):
             in_channels=2, out_channels=c, kernel_size=7, padding="same"
         )
 
+        self.stft_window = nn.Buffer(torch.hann_window(self.w))
+
         self.units = nn.ModuleList(
             [
                 STFTResidualUnit(n=c, m=2, s=(1, 2)),
@@ -79,7 +81,7 @@ class STFTDiscriminator(nn.Module):
             x,
             n_fft=self.w,
             hop_length=self.h,
-            window=torch.hann_window(self.w),
+            window=self.stft_window,
             return_complex=True,
         )  # (B, W // 2 + 1, T // H + 1) = (B, F, T')
 
