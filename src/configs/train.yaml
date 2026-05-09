@@ -1,0 +1,43 @@
+defaults:
+  - model: soundstream
+  - writer: wandb
+  - metrics: audio
+  - datasets: librispeech
+  - dataloader: basic
+  - transforms: basic
+  - _self_
+
+# From the SeaNet paper
+optimizers:
+  generator:
+    _target_: torch.optim.Adam
+    lr: 1e-4
+    betas: [0.5, 0.9]
+  discriminator:
+    _target_: torch.optim.Adam
+    lr: 1e-4
+    betas: [0.5, 0.9]
+
+lr_schedulers: {} # No lr schedulers
+
+general:
+  sample_rate: 16000
+  batch_size: 24
+  crop_secs: 0.8
+  data_root: "./data/"
+
+trainer:
+  log_step: 10
+  n_epochs: 16
+  epoch_len: null # epoch-based
+  device_tensors: ["input"] # which tensors should be on device (ex. GPU)
+  resume_from: null # null or path to the checkpoint dir with *.pth and config.yaml
+  device: cuda # device name or "auto"
+  override: true # if True, will override the previous run with the same name
+  monitor: "off" # "off" or "max/min metric_name", i.e. our goal is to maximize/minimize metric
+  save_period: 4 # checkpoint each save_period epochs in addition to the best epoch
+  early_stop: ${trainer.n_epochs} # epochs for early stopping
+  save_dir: "saved"
+  autocast: false
+  seed: 1
+  max_grad_norm: 10.0

@@ -1,5 +1,6 @@
-from torch import nn, Tensor
-from components import *
+from torch import Tensor, nn
+
+from .components import *
 
 
 class DecoderBlock(nn.Module):
@@ -18,15 +19,15 @@ class DecoderBlock(nn.Module):
 
 
 class Decoder(nn.Module):
-    def __init__(self, c: int, k: int) -> None:
+    def __init__(self, c: int, k: int, strides: list[int] = STRIDES) -> None:
         super().__init__()
 
         self.conv0 = CausalConv(
-            in_channels=k, out_channels=2 ** len(STRIDES) * c, kernel_size=7
+            in_channels=k, out_channels=2 ** len(strides) * c, kernel_size=7
         )
 
         self.blocks = nn.ModuleList(
-            [DecoderBlock(n=2**i * c, s=s) for i, s in list(enumerate(STRIDES))[::-1]]
+            [DecoderBlock(n=2**i * c, s=s) for i, s in list(enumerate(strides))[::-1]]
         )
 
         self.conv1 = CausalConv(in_channels=c, out_channels=1, kernel_size=7)

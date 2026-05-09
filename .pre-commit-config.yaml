@@ -23,7 +23,3 @@ repos:
     hooks:
       - id: isort
         args: [ "--profile", "black", "--filter-files" ]
-  - repo: https://github.com/PyCQA/flake8
-    rev: 6.0.0
-    hooks:
-      - id: flake8

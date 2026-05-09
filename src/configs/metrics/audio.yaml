@@ -1,0 +1,13 @@
+train: {}
+  # Computing NISQA is slower
+  # - _target_: src.metrics.stoi.STOIMetric
+  #   name: "STOI"
+  #   sample_rate: ${general.sample_rate}
+
+inference: # metrics that are calculated during inference (eval)
+  - _target_: src.metrics.nisqa.NISQAMetric
+    name: "NISQA"
+    sample_rate: ${general.sample_rate}
+  - _target_: src.metrics.stoi.STOIMetric
+    name: "STOI"
+    sample_rate: ${general.sample_rate}

@@ -1,6 +1,7 @@
 import torch
-from torch import Tensor
 import torch.nn as nn
+from torch import Tensor
+
 
 class SSLoss(nn.Module):
     def __init__(self, n_disc: int = 4):

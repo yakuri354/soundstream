@@ -1,5 +1,6 @@
-from torch import nn, Tensor
-from components import *
+from torch import Tensor, nn
+
+from .components import *
 
 # sus Verify pad mode
 
@@ -25,17 +26,17 @@ class EncoderBlock(nn.Module):
 
 
 class Encoder(nn.Module):
-    def __init__(self, c: int, k: int) -> None:
+    def __init__(self, c: int, k: int, strides: list[int] = STRIDES) -> None:
         super().__init__()
 
         self.conv0 = CausalConv(in_channels=1, out_channels=c, kernel_size=7)
 
         self.blocks = nn.ModuleList(
-            [EncoderBlock(n=2 ** (i + 1) * c, s=s) for i, s in enumerate(STRIDES)]
+            [EncoderBlock(n=2 ** (i + 1) * c, s=s) for i, s in enumerate(strides)]
         )
 
         self.conv1 = CausalConv(
-            in_channels=2 ** len(STRIDES) * c, out_channels=k, kernel_size=3
+            in_channels=2 ** len(strides) * c, out_channels=k, kernel_size=3
         )
 
     def forward(self, x: Tensor) -> Tensor:
@@ -44,5 +45,4 @@ class Encoder(nn.Module):
         for block in self.blocks:
             y = block(y)
 
-        y = self.conv1(y)
-        return y
+        return self.conv1(y)

@@ -1,5 +1,8 @@
+from functools import reduce
+from operator import mul
 from typing import Literal
-from torch import nn, Tensor
+
+from torch import Tensor, nn
 
 STRIDES = [2, 4, 5, 8]
 DILATIONS = [1, 3, 9]
