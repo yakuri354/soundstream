@@ -48,7 +48,8 @@ class STFTDiscriminator(nn.Module):
             in_channels=2, out_channels=c, kernel_size=7, padding="same"
         )
 
-        self.stft_window = nn.Buffer(torch.hann_window(self.w))
+        # We need to clone the window as the memory optimizations break model saving/loading
+        self.stft_window = nn.Buffer(torch.hann_window(self.w).clone())
 
         self.units = nn.ModuleList(
             [

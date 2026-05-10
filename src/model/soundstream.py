@@ -1,6 +1,7 @@
 from itertools import chain
 from typing import Iterable
 
+from huggingface_hub import PyTorchModelHubMixin
 from torch import Tensor, nn
 
 from ..loss.adversarial import DiscriminatorLoss, FeatureLoss, GeneratorAdvLoss
@@ -13,7 +14,7 @@ from .encoder import Encoder
 from .quant import MultiRVQ
 
 
-class SoundStreamBase(nn.Module):
+class SoundStreamBase(nn.Module, PyTorchModelHubMixin):
     def __init__(
         self,
         sample_rate: int = 16000,

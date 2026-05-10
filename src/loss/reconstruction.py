@@ -22,6 +22,10 @@ class ReconstructionLoss(nn.Module):
                     n_fft=2**s,
                     hop_length=2**s // 4,
                     n_mels=64,
+                    # We need to clone the window as the memory optimizations break model saving/loading
+                    window_fn=lambda *args, **kwargs: torch.hann_window(
+                        *args, **kwargs
+                    ).clone(),
                 )
                 for s in self.s_values
             ]
