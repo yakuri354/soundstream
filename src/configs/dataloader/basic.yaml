@@ -1,4 +1,31 @@
-_target_: torch.utils.data.DataLoader
-batch_size: ${general.batch_size}
-num_workers: 8
-pin_memory: True
+train:
+  _target_: torch.utils.data.DataLoader
+  batch_size: ${general.train_batch_size}
+  num_workers: 4
+  pin_memory: True
+  shuffle: True
+  collate_fn:
+    _target_: src.datasets.data_utils.BasicCollatorWithPadding
+val:
+  _target_: torch.utils.data.DataLoader
+  batch_size: ${general.eval_batch_size}
+  num_workers: 4
+  pin_memory: True
+  # We want to load the eval dataset without random crops so we need to pad it. We need to preserve the original shapes for metrics
+  collate_fn:
+    _target_: src.datasets.data_utils.BasicCollatorWithPadding
+    add_orig_len: true
+    pad_factor: 1000 # The convolutional model might produce output of different shape when input is not divisible by some factor
+    pad_const: 0.0
+    pad_mode: constant
+test:
+  _target_: torch.utils.data.DataLoader
+  batch_size: ${general.eval_batch_size}
+  num_workers: 4
+  pin_memory: True
+  collate_fn:
+    _target_: src.datasets.data_utils.BasicCollatorWithPadding
+    add_orig_len: true
+    pad_factor: 1000
+    pad_const: 0.0
+    pad_mode: constant

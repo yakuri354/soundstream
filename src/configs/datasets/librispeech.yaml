@@ -6,13 +6,14 @@ train:
   instance_transforms: ${transforms.instance_transforms.train}
 val:
   _target_: src.datasets.librispeech.LibrispeechDataset
-  split: "dev-clean"
+  split: "test-clean"
+  root: ${general.data_root}
+  sample_rate: ${general.sample_rate}
+  limit: ${general.eval_limit}
+  instance_transforms: ${transforms.instance_transforms.inference}
+test:
+  _target_: src.datasets.librispeech.LibrispeechDataset
+  split: "test-clean"
   root: ${general.data_root}
   sample_rate: ${general.sample_rate}
   instance_transforms: ${transforms.instance_transforms.inference}
-# test:
-#   _target_: src.datasets.librispeech.LibrispeechDataset
-#   split: "test-clean"
-#   root: ${general.data_root}
-#   sample_rate: ${general.sample_rate}
-#   instance_transforms: ${transforms.instance_transforms.inference}

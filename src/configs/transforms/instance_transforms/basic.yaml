@@ -7,12 +7,12 @@ train:
     is_eval: false
 
 inference:
-  input: # name of the tensor on which we apply transform
-    _target_: src.transforms.wav_augs.crop.InstanceRandomCropPad
-    sample_rate: ${general.sample_rate}
-    min_duration: ${general.crop_secs}
-    max_duration: ${general.crop_secs}
-    is_eval: false
+  # input: # name of the tensor on which we apply transform
+  #   _target_: src.transforms.wav_augs.crop.InstanceRandomCropPad
+  #   sample_rate: ${general.sample_rate}
+  #   min_duration: ${general.crop_secs}
+  #   max_duration: ${general.crop_secs}
+  #   is_eval: true
   # get_spectrogram:
   #   _target_: torchaudio.transforms.MelSpectrogram
   #   sample_rate: 16000

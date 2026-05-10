@@ -262,8 +262,11 @@ class BaseTrainer:
 
         # Run val/test
         for part, dataloader in self.evaluation_dataloaders.items():
-            val_logs = self._evaluation_epoch(epoch, part, dataloader)
-            logs.update(**{f"{part}_{name}": value for name, value in val_logs.items()})
+            if epoch % self.cfg_trainer.val_epochs[part] == 0:
+                val_logs = self._evaluation_epoch(epoch, part, dataloader)
+                logs.update(
+                    **{f"{part}_{name}": value for name, value in val_logs.items()}
+                )
 
         return logs
 
@@ -291,10 +294,6 @@ class BaseTrainer:
                     batch,
                     metrics=self.evaluation_metrics,
                 )
-                for metric in self.metrics["inference"]:
-                    result = metric(batch)
-                    for key in result:
-                        self.evaluation_metrics.update(key, result[key])
             self.writer.set_step(epoch * self.epoch_len, part)
             self._log_scalars(self.evaluation_metrics, prefix="val_")
             self._log_batch(
@@ -525,7 +524,7 @@ class BaseTrainer:
         """
         resume_path = str(resume_path)
         self.logger.info(f"Loading checkpoint: {resume_path} ...")
-        checkpoint = torch.load(resume_path, self.device)
+        checkpoint = torch.load(resume_path, self.device, weights_only=False)
         self.start_epoch = checkpoint["epoch"] + 1
         self.mnt_best = checkpoint["monitor_best"]
 

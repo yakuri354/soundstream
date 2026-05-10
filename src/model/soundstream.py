@@ -82,7 +82,11 @@ class SoundStreamBase(nn.Module):
         }
 
     def forward(
-        self, input: Tensor, compute_loss: bool = False, update_codebook: bool = False
+        self,
+        input: Tensor,
+        compute_loss: bool = False,
+        update_codebook: bool = False,
+        **kwargs
     ):
         enc = self.encoder(input).transpose(-1, -2)
 

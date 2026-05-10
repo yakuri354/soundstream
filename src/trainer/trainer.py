@@ -44,6 +44,8 @@ class Trainer(BaseTrainer):
                 self.optimizers[opt].zero_grad()
             params["update_codebook"] = True
 
+        metric_funcs = [f for f in metric_funcs if f.should_run(epoch=self._last_epoch)]
+
         if not self.model.is_init:
             # assert self.is_train
             self.model.initialize(batch["input"])

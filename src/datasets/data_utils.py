@@ -1,9 +1,58 @@
 from itertools import repeat
 
+import torch
+import torch.nn.functional as F
 from hydra.utils import instantiate
+from torch import Tensor
 
 # from src.datasets.collate import collate_fn
 from src.utils.init_utils import set_worker_seed
+
+
+class BasicCollatorWithPadding:
+    def __init__(
+        self,
+        add_orig_len: bool = False,
+        pad_factor: int = 1,
+        pad_mode="constant",
+        pad_const=0.0,
+    ):
+        self.add_orig_len = add_orig_len
+        self.pad_factor = pad_factor
+        self.pad_const = pad_const
+        self.pad_mode = pad_mode
+        self.pad_dim = -1
+
+    def __call__(self, data):
+        res = {}
+        for key in data[0]:
+            target_dim = max(val[key].shape[self.pad_dim] for val in data)
+
+            if target_dim % self.pad_factor != 0:
+                target_dim += self.pad_factor - target_dim % self.pad_factor
+
+            batch = torch.stack(
+                [
+                    F.pad(
+                        val[key],
+                        (0, target_dim - val[key].shape[-1]),
+                        self.pad_mode,
+                        self.pad_const,
+                    )
+                    for val in data
+                ]
+            )
+
+            res[key] = batch
+
+            if self.add_orig_len:
+                old_len = torch.tensor(
+                    [val[key].shape[self.pad_dim] for val in data],
+                    device=data[0][key].device,
+                )
+                res[key + "_original_len"] = old_len
+
+        return res
 
 
 def inf_loop(dataloader):
@@ -72,16 +121,16 @@ def get_dataloaders(config, device):
             config.datasets[dataset_partition]
         )  # instance transforms are defined inside
 
-        assert config.dataloader.batch_size <= len(dataset), (
-            f"The batch size ({config.dataloader.batch_size}) cannot "
+        cfg = config.dataloader[dataset_partition]
+
+        assert cfg.batch_size <= len(dataset), (
+            f"The batch size ({cfg.batch_size}) cannot "
             f"be larger than the dataset length ({len(dataset)})"
         )
 
         partition_dataloader = instantiate(
-            config.dataloader,
+            cfg,
             dataset=dataset,
-            # Use the default torch collator
-            # collate_fn=collate_fn,
             drop_last=(dataset_partition == "train"),
             shuffle=(dataset_partition == "train"),
             worker_init_fn=set_worker_seed,

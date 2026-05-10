@@ -45,7 +45,7 @@ def main(config):
     for metric_type in ["train", "inference"]:
         for metric_config in config.metrics.get(metric_type, []):
             # use text_encoder in metrics
-            metrics[metric_type].append(instantiate(metric_config))
+            metrics[metric_type].append(instantiate(metric_config).to(device))
 
     # build optimizer, learning rate scheduler
 
