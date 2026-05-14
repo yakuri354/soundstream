@@ -4,7 +4,6 @@ from typing import Literal
 
 from torch import Tensor, nn
 
-STRIDES = [2, 4, 5, 8]
 DILATIONS = [1, 3, 9]
 
 

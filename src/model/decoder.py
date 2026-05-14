@@ -19,7 +19,7 @@ class DecoderBlock(nn.Module):
 
 
 class Decoder(nn.Module):
-    def __init__(self, c: int, k: int, strides: list[int] = STRIDES) -> None:
+    def __init__(self, c: int, k: int, strides: list[int]) -> None:
         super().__init__()
 
         self.conv0 = CausalConv(
