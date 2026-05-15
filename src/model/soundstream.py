@@ -70,6 +70,13 @@ class SoundStreamBase(nn.Module, PyTorchModelHubMixin):
         self.rvq.initialize(enc)
         self.is_init = True
 
+    @classmethod
+    def _from_pretrained(cls, *args, **kwargs):
+        self = super()._from_pretrained(*args, **kwargs)
+        self.is_init = True
+        self.rvq.is_init = True
+        return self
+
     def compute_loss(
         self, x: Tensor, g: Tensor, z: Tensor, z_hat_d: Tensor
     ) -> dict[str, Tensor]:
@@ -87,7 +94,7 @@ class SoundStreamBase(nn.Module, PyTorchModelHubMixin):
         input: Tensor,
         compute_loss: bool = False,
         update_codebook: bool = False,
-        **kwargs
+        **kwargs,
     ):
         enc = self.encoder(input).transpose(-1, -2)
 
