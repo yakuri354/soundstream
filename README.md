@@ -4,7 +4,7 @@
 
 This repository contains a PyTorch implementation of the [SoundStream](https://arxiv.org/abs/2107.03312) audio codec. The codec uses a neural net to encode and decode audio.
 
-<a target="_blank" href="https://colab.research.google.com/github/yakuri354/soundstream/inference.ipynb">
+<a target="_blank" href="https://colab.research.google.com/github/yakuri354/soundstream/blob/main/inference.ipynb">
   <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
 </a>
 
@@ -47,7 +47,7 @@ The repo includes an inference notebook that encodes and decoded a sample speech
 
 The easiest way to test the model is to run the notebook in Google Colab.
 
-<a target="_blank" href="https://colab.research.google.com/github/yakuri354/soundstream/inference.ipynb">
+<a target="_blank" href="https://colab.research.google.com/github/yakuri354/soundstream/blob/main/inference.ipynb">
   <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
 </a>
 
