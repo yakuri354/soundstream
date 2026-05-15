@@ -26,7 +26,7 @@ class EncoderBlock(nn.Module):
 
 
 class Encoder(nn.Module):
-    def __init__(self, c: int, k: int, strides: list[int] = STRIDES) -> None:
+    def __init__(self, c: int, k: int, strides: list[int]) -> None:
         super().__init__()
 
         self.conv0 = CausalConv(in_channels=1, out_channels=c, kernel_size=7)

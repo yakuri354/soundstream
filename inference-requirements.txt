@@ -1,0 +1,25 @@
+# The inference dependencies are a subset of train dependencies.
+# This file exists to support use cases when rolling out a .venv is impractical (i.e. Google Colab)
+# It must be updated together with pyproject.toml
+# While uv.lock guarantees that the code will work properly, this is best-effort as we cannot control the whole environment
+
+comet-ml>=3.57.4
+datasets>=4.8.5
+huggingface-hub>=1.13.0
+hydra-core>=1.3.2
+matplotlib>=3.10.9
+numpy>=2.4.4
+omegaconf>=2.3.0
+pandas>=3.0.2
+pillow>=12.2.0
+safetensors>=0.7.0
+torch>=2.11.0
+torch-audiomentations>=0.12.0
+torch-kmeans>=0.2.0
+torchaudio>=2.11.0
+torchcodec>=0.11.1
+torchmetrics[audio]>=1.9.0
+torchvision>=0.26.0
+tqdm>=4.67.3
+wandb>=0.26.1
+wget>=3.2
