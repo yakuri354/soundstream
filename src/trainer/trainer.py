@@ -1,9 +1,5 @@
-from pathlib import Path
-
-import pandas as pd
 import torch
 
-from src.logger.utils import plot_spectrogram
 from src.metrics.tracker import MetricTracker
 from src.trainer.base_trainer import BaseTrainer
 
@@ -13,7 +9,7 @@ class Trainer(BaseTrainer):
     Trainer class. Defines the logic of batch logging and processing.
     """
 
-    def process_batch(self, batch, metrics: MetricTracker):
+    def process_batch(self, batch: dict, metrics: MetricTracker) -> dict:
         """
         Run batch through the model, compute metrics, compute loss,
         and do training step (during training stage).
@@ -60,14 +56,12 @@ class Trainer(BaseTrainer):
 
         if self.is_train:
             batch["gen_loss"].backward()
-            self._clip_grad_norm()
             self.optimizers["generator"].step()
             if "generator" in self.lr_schedulers:
                 self.lr_schedulers["generator"].step()
 
             self.optimizers["discriminator"].zero_grad()
             batch["discr_loss"].backward()
-            self._clip_grad_norm()
             self.optimizers["discriminator"].step()
             if "discriminator" in self.lr_schedulers:
                 self.lr_schedulers["discriminator"].step()

@@ -21,7 +21,7 @@ class MultiRVQ(nn.Module):
         self.k = k  # codebook size for each quantizer
         self.d = d  # depth, i.e. number of quantizers
         self.n = emb_dim
-        self.codes = nn.Parameter(torch.empty((d, k, emb_dim)))
+        self.codes = nn.Parameter(torch.empty((d, k, emb_dim)), requires_grad=False)
 
         self.freq = nn.Buffer(torch.empty((d, k)), persistent=True)
         self.sums = nn.Buffer(torch.empty((d, k, emb_dim)), persistent=True)
@@ -41,14 +41,12 @@ class MultiRVQ(nn.Module):
 
         r = z
 
-        debug("Initializing RVQ via KMeans")
+        debug("Initializing RVQ")
 
         for level in range(self.d):
             if self.init_kmeans:
                 kmeans = KMeans(n_clusters=self.k, verbose=False)
-                self.codes[level] = kmeans(r.reshape(1, -1, self.n)).centers[
-                    0, ...
-                ]  # sus
+                self.codes[level] = kmeans(r.reshape(1, -1, self.n)).centers[0, ...]
             else:
                 r_flat = r.reshape(-1, self.n)
 
@@ -73,7 +71,7 @@ class MultiRVQ(nn.Module):
 
         samples = torch.randint(0, B_total, (self.k,), device=z.device)  # (K,)
         self.codes[level, mask] = z_flat[samples][mask]
-        self.freq[level, mask] = self.freq_threshold  # sus?
+        self.freq[level, mask] = self.freq_threshold
 
         mask_size = mask.sum().int().item()
 
@@ -90,9 +88,7 @@ class MultiRVQ(nn.Module):
         self.freq[level] = self.freq[level] * self.gamma + batch_freq * (1 - self.gamma)
 
         batch_sum = one_hot.T @ z.reshape(-1, self.n)  # (K, B') @ (B', N) -> (K, N)
-        self.sums[level] = self.sums[level] * self.gamma + batch_sum * (
-            1 - self.gamma
-        )  # sus: will this overflow?
+        self.sums[level] = self.sums[level] * self.gamma + batch_sum * (1 - self.gamma)
 
         self.codes[level] = self.sums[level] / self.freq[level][..., None]
 
@@ -118,7 +114,6 @@ class MultiRVQ(nn.Module):
 
         return z_hat, k
 
-    @torch.amp.custom_fwd(device_type="cuda", cast_inputs=torch.float32)
     def forward(self, z: Tensor, update: bool = False) -> tuple[Tensor, Tensor]:
         """
         z: (B..., N)

@@ -5,7 +5,6 @@ import torch.nn.functional as F
 from hydra.utils import instantiate
 from torch import Tensor
 
-# from src.datasets.collate import collate_fn
 from src.utils.init_utils import set_worker_seed
 
 
@@ -23,7 +22,7 @@ class BasicCollatorWithPadding:
         self.pad_mode = pad_mode
         self.pad_dim = -1
 
-    def __call__(self, data):
+    def __call__(self, data: list[dict[str, Tensor]]) -> dict[str, Tensor]:
         res = {}
         for key in data[0]:
             target_dim = max(val[key].shape[self.pad_dim] for val in data)
@@ -99,8 +98,6 @@ def get_dataloaders(config, device):
 
     Args:
         config (DictConfig): hydra experiment config.
-        text_encoder (CTCTextEncoder): instance of the text encoder
-            for the datasets.
         device (str): device to use for batch transforms.
     Returns:
         dataloaders (dict[DataLoader]): dict containing dataloader for a

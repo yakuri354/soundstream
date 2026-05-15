@@ -1,6 +1,4 @@
-# The inference dependencies are a subset of train dependencies.
-# This file exists to support use cases when a .venv is impractical (i.e. Google Colab)
-# It must be updated together with pyproject.toml
+# This file exists to support use cases when using a virtual env is impossible (i.e. Google Colab)
 # While uv.lock guarantees that the code will work properly, this is best-effort as we cannot control the whole environment
 
 datasets>=4.8.5

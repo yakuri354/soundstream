@@ -1,7 +1,7 @@
 [project]
 name = "soundstream"
 version = "0.1.0"
-description = "Add your description here"
+description = "An implementation of the SoundStream codec"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
@@ -30,5 +30,7 @@ dependencies = [
 [dependency-groups]
 dev = [
     "ipykernel>=7.2.0",
+    "nbformat>=5.10.4",
+    "plotly>=6.7.0",
     "ptipython>=1.0.1",
 ]

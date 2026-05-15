@@ -2,13 +2,13 @@ train:
   _target_: src.datasets.librispeech.LibrispeechDataset
   split: "train-clean-100"
   root: ${general.data_root}
-  limit: ${general.batch_size}
+  limit: ${general.train_batch_size}
   sample_rate: ${general.sample_rate}
   instance_transforms: ${transforms.instance_transforms.train}
 val:
   _target_: src.datasets.librispeech.LibrispeechDataset
   split: "test-clean"
   root: ${general.data_root}
-  limit: ${general.batch_size}
+  limit: ${general.eval_batch_size}
   sample_rate: ${general.sample_rate}
   instance_transforms: ${transforms.instance_transforms.inference}

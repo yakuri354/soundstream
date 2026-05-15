@@ -9,7 +9,7 @@ class LibrispeechDataset(Dataset):
         instance_transforms,
         sample_rate: int,
         split: str = "train-clean-100",
-        limit=None,
+        limit: int | None = None,
         download: bool = True,
         base=LIBRISPEECH,
     ) -> None:

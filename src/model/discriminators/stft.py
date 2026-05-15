@@ -90,7 +90,6 @@ class STFTDiscriminator(nn.Module):
         f = f.permute(0, 3, 2, 1)  # (B, 2, T', F)
 
         f = self.conv0(f)
-        # sus -- do we need to apply an activation here?
 
         activations.append(f.transpose(-1, -2))
 

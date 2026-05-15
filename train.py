@@ -39,12 +39,10 @@ def main(config):
 
     # build model architecture, then print to console
     model = instantiate(config.model).to(device)
-    # logger.info(model)
 
     metrics = {"train": [], "inference": []}
     for metric_type in ["train", "inference"]:
         for metric_config in config.metrics.get(metric_type, []):
-            # use text_encoder in metrics
             metrics[metric_type].append(instantiate(metric_config).to(device))
 
     # build optimizer, learning rate scheduler

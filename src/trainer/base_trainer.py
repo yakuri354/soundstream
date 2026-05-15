@@ -2,7 +2,6 @@ from abc import abstractmethod
 
 import torch
 from numpy import inf
-from torch.nn.utils import clip_grad_norm_
 from tqdm.auto import tqdm
 from tqdm.contrib.logging import logging_redirect_tqdm
 
@@ -70,6 +69,9 @@ class BaseTrainer:
         self.optimizers = optimizers
         self.lr_schedulers = lr_schedulers
         self.batch_transforms = batch_transforms
+
+        # Gradient clipping is unsupported
+        assert self.config["trainer"]["max_grad_norm"] is None
 
         self.device_type = torch.device(device).type
         self.autocast = self.config["trainer"][
@@ -399,12 +401,7 @@ class BaseTrainer:
         Clips the gradient norm by the value defined in
         config.trainer.max_grad_norm
         """
-        if self.config["trainer"].get("max_grad_norm", None) is not None:
-            clip_grad_norm_(
-                self.model.parameters(),
-                self.config["trainer"]["max_grad_norm"],
-                error_if_nonfinite=True,
-            )
+        raise NotImplementedError()
 
     @torch.no_grad()
     def _get_grad_norm(self, norm_type=2):
@@ -566,7 +563,7 @@ class BaseTrainer:
             pretrained_path (str): path to the model state dict.
         """
         pretrained_path = str(pretrained_path)
-        if hasattr(self, "logger"):  # to support both trainer and inferencer
+        if hasattr(self, "logger"):
             self.logger.info(f"Loading model weights from: {pretrained_path} ...")
         else:
             print(f"Loading model weights from: {pretrained_path} ...")

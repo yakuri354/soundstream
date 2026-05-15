@@ -6,7 +6,7 @@ from .ssloss import SSLoss
 
 class DiscriminatorLoss(SSLoss):
     """
-    Trains the discriminator to discern real and generated images
+    Trains the discriminator to discern real and generated objects
     """
 
     def compute(
@@ -37,7 +37,7 @@ class GeneratorAdvLoss(SSLoss):
 
 class FeatureLoss(SSLoss):
     """
-    Trains the generator to produce images that are similar in discriminator latent space
+    Trains the generator to produce objects that are similar in discriminator latent space
     """
 
     def compute(

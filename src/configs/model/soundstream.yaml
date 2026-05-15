@@ -7,7 +7,7 @@ enc_dec_c: 32
 codebook_size: 1024
 codebook_depth: 8
 strides: [2, 4, 5, 5] # Modified to match the 6k bitrate for 16khz
-rec_loss_lambda: 0.5 # needs to be 1.0
+rec_loss_lambda: 0.5
 commit_loss_lambda: 1.0
 feat_loss_lambda: 100.0
 adv_loss_lambda: 3.0

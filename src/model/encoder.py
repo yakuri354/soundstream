@@ -1,8 +1,6 @@
 from torch import Tensor, nn
 
-from .components import *
-
-# sus Verify pad mode
+from .components import DILATIONS, CausalConv, ResUnit
 
 
 class EncoderBlock(nn.Module):

@@ -11,7 +11,7 @@ class SSLoss(nn.Module):
     def compute(
         self, x: Tensor, G: Tensor, D_x: list[list[Tensor]], D_G: list[list[Tensor]]
     ) -> Tensor:
-        return NotImplemented
+        raise NotImplementedError
 
     def forward(
         self, x: Tensor, G: Tensor, D_x: list[list[Tensor]], D_G: list[list[Tensor]]

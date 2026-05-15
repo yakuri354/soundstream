@@ -60,7 +60,6 @@ class SoundStreamBase(nn.Module, PyTorchModelHubMixin):
             return chain(
                 self.encoder.parameters(),
                 self.decoder.parameters(),
-                self.rvq.parameters(),
             )
         else:
             raise KeyError()
@@ -95,7 +94,7 @@ class SoundStreamBase(nn.Module, PyTorchModelHubMixin):
         compute_loss: bool = False,
         update_codebook: bool = False,
         **kwargs,
-    ):
+    ) -> dict[str, Tensor]:
         enc = self.encoder(input).transpose(-1, -2)
 
         z_hat_d, k = self.rvq(enc, update=update_codebook)

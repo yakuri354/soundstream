@@ -86,7 +86,7 @@ class MultiResWaveDiscriminator(nn.Module):
             [WaveDiscriminator(*args, **kwargs) for _ in range(self.layers)]
         )
 
-        self.downsample = nn.AvgPool1d(kernel_size=4, stride=2, padding=1)  # sus
+        self.downsample = nn.AvgPool1d(kernel_size=4, stride=2, padding=1)
 
     def forward(self, x: Tensor) -> list[list[Tensor]]:
         results = []
